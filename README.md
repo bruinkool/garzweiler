@@ -40,4 +40,3 @@ e.g. http://localhost:8080/swagger-ui.html
 ### Generator
 
 [OpenAPI Generator](https://openapi-generator.tech/docs/generators/) includes a list of templates that can be used to generate different clients for this API server.
->>>>>>> Update README.md with some doc structure and badges
