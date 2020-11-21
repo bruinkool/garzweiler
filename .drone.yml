@@ -1,0 +1,59 @@
+---
+kind: pipeline
+type: kubernetes
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: test
+  image: adoptopenjdk/openjdk15:alpine-slim
+  commands:
+  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - ./mvnw test -B
+
+- name: restore-cache
+  image: drillster/drone-volume-cache
+  settings:
+    restore: true
+    mount:
+      - target
+  volumes:
+    - name: cache
+      path: /cache
+
+- name: prepare-cache
+  image: busybox
+  commands:
+    - mkdir -p /cache/${DRONE_REPO}/target
+    - mkdir -p /cache/${DRONE_REPO}/docker
+  volumes:
+    - name: cache
+      path: /cache
+
+
+- name: docker
+  image: plugins/docker
+  settings:
+    dockerfile: ./Dockerfile
+    password:
+      from_secret: REGISTRY_PASSWORD
+    registry: harbor.gate.sh
+    repo: harbor.gate.sh/bruinkool/garzweiler
+    tags:
+    - ${DRONE_COMMIT_SHA:0:7}
+    - ${DRONE_COMMIT_BRANCH}
+    force_tag: true
+    use_cache: true
+    username:
+      from_secret: REGISTRY_USERNAME
+  volumes:
+    - name: docker
+      path: /var/lib/docker
+  when:
+    branch:
+    - main
+
+...

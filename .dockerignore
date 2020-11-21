@@ -1,5 +1,8 @@
 # Ignore everything
 **
+!/mvnw
+!/.mvn/wrapper/maven-wrapper.properties
+!/.mvn/wrapper/MavenWrapperDownloader.java
 
 # Allow files and directories
 !/pom.xml
