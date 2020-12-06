@@ -17,6 +17,13 @@ Backend application for bruinkoolland.
 
 **This project is under active development. Current API specification is very likely to change.**
 
+## Deployment
+
+Using [Helm](https://helm.sh/) chart:
+```
+helm install garzweiler charts/garzweiler -f .env/values.yaml
+```
+
 ## Development
 
 ### Prerequisites
