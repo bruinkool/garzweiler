@@ -18,6 +18,24 @@
         <java.version>14</java.version>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -26,10 +44,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -119,13 +133,19 @@
         </dependency>
         <dependency>
             <groupId>io.sentry</groupId>
-            <artifactId>sentry</artifactId>
-            <version>1.7.30</version>
+            <artifactId>sentry-spring-boot-starter</artifactId>
+            <version>3.2.0</version>
         </dependency>
     </dependencies>
 
     <packaging>jar</packaging>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <finalName>garzweiler</finalName>
         <plugins>
             <plugin>
