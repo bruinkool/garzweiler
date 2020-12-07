@@ -4,7 +4,7 @@ COPY .mvn/wrapper/MavenWrapperDownloader.java /build/.mvn/wrapper/
 COPY ./mvnw /build/
 COPY pom.xml /build/
 WORKDIR /build/
-RUN ./mvnw dependency:go-offline
+RUN ./mvnw dependency:go-offline -q
 COPY src /build/src/
 RUN ./mvnw package -DskipTests
 
