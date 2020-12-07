@@ -23,6 +23,7 @@ steps:
       registry: harbor.gate.sh
       repo: harbor.gate.sh/bruinkool/garzweiler
       tags:
+        - ${DRONE_COMMIT_SHA:0:7}
         - latest
       force_tag: true
       use_cache: true
@@ -41,6 +42,7 @@ steps:
     image: harbor.gate.sh/mdeheij/kubernetes-helm-deploy
     commands:
       - echo "$HELM_VALUES" | base64 -d > .helm_values.yaml
+      - sed "s|%%APP_VERSION%%|${DRONE_COMMIT_SHA:0:7}|g" -i .helm_values.yaml
       - drone-helm3
     environment:
       HELM_VALUES:
@@ -52,7 +54,7 @@ steps:
       chart: ./charts/garzweiler
       release: garzweiler
       debug: false
-      helm_debug: false
+      helm_debug: true
       namespace: bruinkool
       timeout: 2m
       envsubst: true
