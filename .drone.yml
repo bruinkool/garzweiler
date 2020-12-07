@@ -1,0 +1,65 @@
+---
+kind: pipeline
+type: kubernetes
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: test
+    image: adoptopenjdk/openjdk15:alpine-slim
+    commands:
+      - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+      - ./mvnw test -B
+
+  - name: docker
+    image: plugins/docker
+    settings:
+      dockerfile: ./Dockerfile
+      password:
+        from_secret: REGISTRY_PASSWORD
+      registry: harbor.gate.sh
+      repo: harbor.gate.sh/bruinkool/garzweiler
+      tags:
+        - ${DRONE_COMMIT_SHA:0:7}
+        - ${DRONE_COMMIT_BRANCH}
+      force_tag: true
+      use_cache: true
+      username:
+        from_secret: REGISTRY_USERNAME
+    volumes:
+      - name: docker
+        path: /var/lib/docker
+    when:
+      branch:
+        - main
+      event:
+        - push
+
+  - name: deploy
+    image: harbor.gate.sh/mdeheij/kubernetes-helm-deploy
+    commands:
+      - echo "$HELM_VALUES" | base64 -d > .helm_values.yaml
+      - drone-helm3
+    environment:
+      HELM_VALUES:
+        from_secret: HELM_VALUES
+    settings:
+      kube_api_server: { from_secret: KUBERNETES_SERVER }
+      kube_token: { from_secret: KUBE_TOKEN }
+      kube_certificate: { from_secret: KUBE_CERTIFICATE }
+      chart: ./charts/garzweiler
+      release: garzweiler
+      debug: false
+      helm_debug: false
+      namespace: bruinkool
+      timeout: 2m
+      envsubst: true
+      values_yaml: [".helm_values.yaml"]
+    when:
+      branch:
+        - main
+      event:
+        - push

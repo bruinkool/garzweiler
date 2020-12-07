@@ -1,0 +1,47 @@
+---
+app:
+  env: prod
+  database:
+    dsn: "REPLACE_ME"
+  sentry:
+    dsn: "REPLACE_ME"
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: "garzweiler.local"
+      paths: [ "/" ]
+  tls:
+    - secretName: "garzweiler.local"
+      hosts:
+        - "garzweiler.local"
+
+podSecurityContext:
+
+securityContext:
+  runAsUser: 1000
+
+resources:
+  limits:
+    cpu: 4000m
+    memory: 500Mi
+  requests:
+    cpu: 100m
+    memory: 180Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+#  targetMemoryUtilizationPercentage: 60
+
+nodeSelector: { }
+
+tolerations: [ ]
+
+affinity: { }

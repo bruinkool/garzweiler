@@ -1,12 +1,14 @@
-FROM maven:3-openjdk-15-slim AS MAVEN_BUILD
+FROM adoptopenjdk/openjdk15:alpine-slim AS MAVEN_BUILD
+COPY .mvn/wrapper/maven-wrapper.properties /build/.mvn/wrapper/
+COPY .mvn/wrapper/MavenWrapperDownloader.java /build/.mvn/wrapper/
+COPY ./mvnw /build/
 COPY pom.xml /build/
 WORKDIR /build/
-# build all dependencies for offline use / cache
-RUN mvn dependency:go-offline -B
+RUN ./mvnw dependency:go-offline
 COPY src /build/src/
-RUN mvn package -Dmaven.test.skip=true
+RUN ./mvnw package -DskipTests
 
-FROM openjdk:15-alpine
+FROM adoptopenjdk/openjdk15:alpine-slim
 WORKDIR /app
 COPY --from=MAVEN_BUILD /build/target/garzweiler.jar /app/
 ENTRYPOINT ["java", "-jar", "garzweiler.jar"]
