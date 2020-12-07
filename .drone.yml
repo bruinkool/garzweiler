@@ -58,3 +58,8 @@ steps:
       timeout: 2m
       envsubst: true
       values_yaml: [".helm_values.yaml"]
+    when:
+      branch:
+        - main
+      event:
+        - push
