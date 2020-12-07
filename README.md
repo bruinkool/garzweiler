@@ -6,7 +6,8 @@ Garzweiler
     <a href="https://github.com/bruinkool/garzweiler/commits/" title="Last Commit"><img src="https://img.shields.io/github/last-commit/bruinkool/garzweiler?style=flat"></a>
     <a href="https://github.com/bruinkool/garzweiler/issues" title="Open Issues"><img src="https://img.shields.io/github/issues/bruinkool/garzweiler?style=flat"></a>
     <a href="https://github.com/bruinkool/garzweiler/blob/main/LICENSE" title="License"><img src="https://img.shields.io/badge/License-MIT-green.svg"></a>
-    <a href="https://bruinkool.land/" title="Bruinkoolland"><img src="https://img.shields.io/website?down_color=red&down_message=offline&label=bruinkool.land&up_color=green&up_message=online&url=https%3A%2F%2Fbruinkool.land"></a>
+    <a href="https://bruinkool.land/" title="Bruinkoolland"><img src="https://img.shields.io/website?down_color=red&down_message=offline&label=bruinkool.land&up_color=green&up_message=online&url=https%3A%2F%2Fbruinkool.land"></a>    
+    <a href="https://ci.gate.sh/bruinkool/garzweiler" title="CI Builds"><img src="https://ci.gate.sh/api/badges/bruinkool/garzweiler/status.svg"></a>
 </p>
 
 <p align="center">
