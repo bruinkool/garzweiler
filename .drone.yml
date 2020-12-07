@@ -11,7 +11,7 @@ steps:
   - name: test
     image: adoptopenjdk/openjdk15:alpine-slim
     commands:
-      - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+      - ./mvnw install -q -DskipTests=true -Dmaven.javadoc.skip=true -B -V
       - ./mvnw test -B
 
   - name: docker
@@ -23,8 +23,7 @@ steps:
       registry: harbor.gate.sh
       repo: harbor.gate.sh/bruinkool/garzweiler
       tags:
-        - ${DRONE_COMMIT_SHA:0:7}
-        - ${DRONE_COMMIT_BRANCH}
+        - latest
       force_tag: true
       use_cache: true
       username:
