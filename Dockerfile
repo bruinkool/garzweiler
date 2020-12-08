@@ -4,9 +4,9 @@ COPY .mvn/wrapper/MavenWrapperDownloader.java /build/.mvn/wrapper/
 COPY ./mvnw /build/
 COPY pom.xml /build/
 WORKDIR /build/
-RUN ./mvnw dependency:go-offline -q
+RUN ./mvnw -ntp dependency:go-offline
 COPY src /build/src/
-RUN ./mvnw package -DskipTests
+RUN ./mvnw -ntp package -DskipTests
 
 FROM adoptopenjdk/openjdk15:alpine-slim
 WORKDIR /app
