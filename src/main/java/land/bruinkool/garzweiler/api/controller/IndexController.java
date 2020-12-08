@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -15,7 +14,7 @@ import java.net.UnknownHostException;
 public class IndexController {
     @GetMapping("/")
     @io.swagger.v3.oas.annotations.Operation(tags = {"app"})
-    public ResponseEntity<IndexResponse> apiStatus(HttpServletRequest request) throws UnknownHostException {
+    public ResponseEntity<IndexResponse> apiStatus() throws UnknownHostException {
         return ResponseEntity.ok(new IndexResponse(true, InetAddress.getLocalHost().getHostName()));
     }
 }
