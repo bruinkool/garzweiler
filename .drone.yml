@@ -14,6 +14,27 @@ steps:
       - ./mvnw install -q -DskipTests=true -Dmaven.javadoc.skip=true -B -V
       - ./mvnw test -B
 
+  - name: restore-cache
+    image: drillster/drone-volume-cache
+    settings:
+      restore: true
+      mount:
+        - target
+    volumes:
+      - name: cache
+        path: /cache  
+
+
+  - name: prepare-cache
+    image: busybox
+    commands:
+      - mkdir -p /cache/bruinkool/target
+      - mkdir -p /cache/bruinkool/docker
+    volumes:
+      - name: cache
+        path: /cache
+
+
   - name: docker
     image: plugins/docker
     settings:
@@ -24,7 +45,7 @@ steps:
       repo: harbor.gate.sh/bruinkool/garzweiler
       tags:
         - ${DRONE_COMMIT_SHA:0:7}
-        - latest
+        - ${DRONE_COMMIT_BRANCH}
       force_tag: true
       use_cache: true
       username:
@@ -33,10 +54,18 @@ steps:
       - name: docker
         path: /var/lib/docker
     when:
-      branch:
-        - main
       event:
         - push
+
+  - name: rebuild-cache
+    image: drillster/drone-volume-cache
+    settings:
+      rebuild: true
+      mount:
+        - target
+    volumes:
+      - name: cache
+        path: /cache
 
   - name: deploy
     image: harbor.gate.sh/mdeheij/kubernetes-helm-deploy
@@ -64,3 +93,14 @@ steps:
         - main
       event:
         - push
+
+volumes:
+  - name: cache
+    host:
+      path: /var/cache
+  - name: target
+    host:
+      path: /var/cache/bruinkool/target
+  - name: docker
+    host:
+      path: /var/cache/bruinkool/docker
