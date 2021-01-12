@@ -71,7 +71,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             base.authorizeRequests()
                     .antMatchers("/").permitAll()
                     .antMatchers("/error").permitAll()
-                    .antMatchers("/api/v1/auth/**").permitAll();
+                    .antMatchers("/api/v1/auth/**").permitAll()
+                    .anyRequest().authenticated();
         } else {
             base.authorizeRequests()
                     .antMatchers("/").permitAll()
