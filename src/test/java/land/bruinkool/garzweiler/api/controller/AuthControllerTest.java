@@ -18,7 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithUserDetails;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -51,6 +50,18 @@ class AuthControllerTest {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmailAddress("test@local.dev");
         loginRequest.setPassword("secret");
+
+        Mockito.when(authenticationManager.authenticate(Mockito.<Authentication>any())).thenReturn(
+                new UsernamePasswordAuthenticationToken("foo", "bar", AuthorityUtils
+                        .commaSeparatedStringToAuthorityList("ROLE_USER")));
+        Mockito.when(jwtUtils.generateJwtToken(Mockito.<Authentication>any())).thenReturn("SOMEJWTTOKEN");
+
+        assertEquals(ResponseEntity.ok("SOMEJWTTOKEN"), authController.login(loginRequest));
+    }
+
+    @Test
+    void loginNoBody() {
+        LoginRequest loginRequest = new LoginRequest();
 
         Mockito.when(authenticationManager.authenticate(Mockito.<Authentication>any())).thenReturn(
                 new UsernamePasswordAuthenticationToken("foo", "bar", AuthorityUtils
