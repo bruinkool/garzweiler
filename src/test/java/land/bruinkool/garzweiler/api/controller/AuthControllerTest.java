@@ -2,6 +2,7 @@ package land.bruinkool.garzweiler.api.controller;
 
 import land.bruinkool.garzweiler.api.request.LoginRequest;
 import land.bruinkool.garzweiler.api.request.SignupRequest;
+import land.bruinkool.garzweiler.api.response.JwtResponse;
 import land.bruinkool.garzweiler.api.response.MessageResponse;
 import land.bruinkool.garzweiler.api.role.RoleService;
 import land.bruinkool.garzweiler.repository.UserRepository;
@@ -56,7 +57,7 @@ class AuthControllerTest {
                         .commaSeparatedStringToAuthorityList("ROLE_USER")));
         Mockito.when(jwtUtils.generateJwtToken(Mockito.<Authentication>any())).thenReturn("SOMEJWTTOKEN");
 
-        assertEquals(ResponseEntity.ok("SOMEJWTTOKEN"), authController.login(loginRequest));
+        assertEquals(ResponseEntity.ok(new JwtResponse("SOMEJWTTOKEN")), authController.login(loginRequest));
     }
 
     @Test
@@ -68,7 +69,7 @@ class AuthControllerTest {
                         .commaSeparatedStringToAuthorityList("ROLE_USER")));
         Mockito.when(jwtUtils.generateJwtToken(Mockito.<Authentication>any())).thenReturn("SOMEJWTTOKEN");
 
-        assertEquals(ResponseEntity.ok("SOMEJWTTOKEN"), authController.login(loginRequest));
+        assertEquals(ResponseEntity.ok(new JwtResponse("SOMEJWTTOKEN")), authController.login(loginRequest));
     }
 
     @Test
