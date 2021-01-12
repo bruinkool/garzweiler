@@ -22,11 +22,6 @@ class ErrorPageControllerTest {
     @Mock
     private HttpServletRequest mockRequest;
 
-    @BeforeEach
-    void setUp() {
-
-    }
-
     @Test
     void getErrorPath() {
         assertEquals("/error", controller.getErrorPath());
