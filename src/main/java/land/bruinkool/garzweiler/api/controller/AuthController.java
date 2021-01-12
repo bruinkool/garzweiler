@@ -2,6 +2,7 @@ package land.bruinkool.garzweiler.api.controller;
 
 import land.bruinkool.garzweiler.api.request.LoginRequest;
 import land.bruinkool.garzweiler.api.request.SignupRequest;
+import land.bruinkool.garzweiler.api.response.JwtResponse;
 import land.bruinkool.garzweiler.api.response.MessageResponse;
 import land.bruinkool.garzweiler.api.role.RoleEnum;
 import land.bruinkool.garzweiler.api.role.RoleService;
@@ -64,14 +65,14 @@ public class AuthController {
 
     @PostMapping("/login")
     @io.swagger.v3.oas.annotations.Operation(tags = {"app"})
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmailAddress(), loginRequest.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return ResponseEntity.ok(jwtUtils.generateJwtToken(authentication));
+        return ResponseEntity.ok(new JwtResponse(jwtUtils.generateJwtToken(authentication)));
     }
 
     @PostMapping("/signup")
@@ -88,6 +89,8 @@ public class AuthController {
                 encoder.encode(signUpRequest.getPassword()));
 
         Set<Role> roles = new HashSet<>();
+
+        //TODO: do not automatically add ROLE_USER to unverified users
         roles.add(roleService.getRole(RoleEnum.ROLE_USER));
         user.setRoles(roles);
 
